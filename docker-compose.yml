@@ -1,0 +1,9 @@
+version: "3"
+services:
+  golang: # exec golangでコンテナをたたける
+    build:
+      context: .
+      dockerfile: ./build/Dockerfile
+    command: /bin/sh -c "go run ./cmd"
+    ports:
+      - 80:80
