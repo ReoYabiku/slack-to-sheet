@@ -6,4 +6,7 @@ tasks:
   - init: go get && go build ./... && go test ./...
     command: go run
 
-
+ports:
+  - port: 80
+    visibility: public
+    onOpen: open-browser
