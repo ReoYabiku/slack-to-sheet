@@ -8,7 +8,7 @@ import (
 )
 
 type request struct {
-	Challenge string `json:challenge`
+	Challenge string `json:"challenge"`
 }
 
 func main() {
