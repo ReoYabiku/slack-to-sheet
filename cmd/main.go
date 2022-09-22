@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -9,12 +8,12 @@ import (
 )
 
 type request struct {
-	Challenge string 	`json:challenge`
+	Challenge string `json:challenge`
 }
 
 func main() {
 	e := echo.New()
-	e.POST("/slack/challenge", func(c echo.Context) error {
+	e.POST("/event", func(c echo.Context) error {
 		req := request{}
 		if err := c.Bind(&req); err != nil {
 			return echo.NewHTTPError(http.StatusBadRequest, err.Error())
