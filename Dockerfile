@@ -6,4 +6,4 @@ RUN mkdir /go/src/app
 WORKDIR /go/src/app
 ADD . /go/src/app
 ENV PORT 80
-CMD [ "go",  "build", "./cmd" ]
+CMD [ "go",  "build", "./cmd/main.go" ]
