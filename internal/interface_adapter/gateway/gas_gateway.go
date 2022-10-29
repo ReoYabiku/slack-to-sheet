@@ -8,7 +8,7 @@ type gasGateway struct {
 	gasClient GASClient
 }
 
-type GASClient interface{
+type GASClient interface {
 	Hoge(string) error
 }
 
