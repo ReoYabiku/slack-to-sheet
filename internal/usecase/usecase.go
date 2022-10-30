@@ -1,13 +1,16 @@
 package usecase
 
-import "errors"
+import (
+	"errors"
+	"regexp"
+)
 
 type useCase struct {
 	gasGateway GASGateway
 }
 
 type UseCase interface {
-	SaveAttendance(string) error
+	SaveAttendance(string, string) error
 	GetStartTime()
 	GetFinishTime()
 	GetTotalTime()
@@ -22,17 +25,14 @@ func NewUseCase(gg GASGateway) *useCase {
 	}
 }
 
-func (u *useCase) SaveAttendance(message string) error {
-	if isStart(message) {
-		if err := u.gasGateway.SaveStartTime(message); err != nil {
-			return err
-		}
+func (u *useCase) SaveAttendance(message string, user string) error {
+
+	// 開始or終了はstring | intで判断形式に変える
+	reportType := isStart(message)
+	if err := u.gasGateway.SaveCommentTime(reportType, user); err != nil {
+		return err
 	}
-	if isFinish(message) {
-		if err := u.gasGateway.SaveFinishTime(); err != nil {
-			return err
-		}
-	}
+	
 	return errors.New("This message was not an attendance report.")
 }
 
@@ -45,9 +45,6 @@ func (u *useCase) GetTotalTime() {}
 func (u *useCase) CreateNewSheet() {}
 
 func isStart(message string) bool {
-	return true
-}
-
-func isFinish(message string) bool {
-	return true
+	r := regexp.MustCompile(`開始`)
+	return r.MatchString(message)
 }

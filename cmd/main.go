@@ -11,8 +11,15 @@ import (
 	echo "github.com/labstack/echo/v4"
 )
 
+type Event struct {
+	Type string `json:"type"`
+	User string `json:"user"`
+	Message string `json:"message"`
+}
+
 type request struct {
 	Challenge string `json:"challenge"`
+	Event     Event  `json:"event"`
 }
 
 func main() {
@@ -22,6 +29,9 @@ func main() {
 	sh := handler.NewSlackHandler(u)
 
 	e := echo.New()
+	// mainが入力を見て判断する必要はない
+	// TODO: handlerでrequestによって呼び出す関数を変える
+	// TODO: usecaseにReturnChallenge（仮）SaveAttendance（実装済み）を置く
 	e.POST("/event", func(c echo.Context) error {
 		log.Println("got an access!!")
 		req := request{}
@@ -32,8 +42,7 @@ func main() {
 			log.Printf("challenge: %s\n", req.Challenge)
 			return c.JSON(http.StatusOK, req)
 		} else {
-			sh.SaveAttendance(c)
-			return nil
+			return sh.SaveAttendance(req.Event.Message, req.Event.User)
 		}
 	})
 	e.GET("/", func(c echo.Context) error {
